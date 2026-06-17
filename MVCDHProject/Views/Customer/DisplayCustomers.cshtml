@@ -1,0 +1,136 @@
+﻿@model IEnumerable<Customer>
+
+@{
+    ViewData["Title"] = "Customer List";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg rounded-4">
+
+        <!-- Header -->
+        <div class="card-header bg-primary text-white text-center rounded-top-4">
+            <h2>Customer Details</h2>
+        </div>
+        
+        <!-- Add Button -->
+        <div class="p-3 text-end">
+            <a asp-action="AddCustomer" class="btn btn-success">
+                ➕ Add New Customer
+            </a>
+        </div>
+
+        <!-- 🔍 Multi-Field Search (Single Line) -->
+        <div class="p-3">
+            <form method="get" asp-action="DisplayCustomers">
+                <div class="row g-2 align-items-center">
+
+                    <!-- Name -->
+                    <div class="col-md-2">
+                        <input type="text" name="name" class="form-control"
+                               placeholder="Name"
+                               value="@Context.Request.Query["name"]" />
+                    </div>
+
+                    <!-- City -->
+                    <div class="col-md-2">
+                        <input type="text" name="city" class="form-control"
+                               placeholder="City"
+                               value="@Context.Request.Query["city"]" />
+                    </div>
+
+                    <!-- Status -->
+                    <div class="col-md-2">
+                        <select name="status" class="form-select">
+                            <option value="">Status</option>
+                            <option value="true" selected="@(Context.Request.Query["status"] == "true")">Active</option>
+                            <option value="false" selected="@(Context.Request.Query["status"] == "false")">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- Balance -->
+                    <div class="col-md-2">
+                        <input type="number" name="minBalance" class="form-control"
+                               placeholder="Min ₹"
+                               value="@Context.Request.Query["minBalance"]" />
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="col-md-4 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary w-50">
+                            🔍 Search
+                        </button>
+
+                        <a asp-action="DisplayCustomers" class="btn btn-secondary w-50">
+                            Reset
+                        </a>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive p-3">
+            <table class="table table-hover table-bordered align-middle text-center">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th asp-for="Custid">Custid</th>
+                        <th asp-for="Name">Name</th>
+                        <th asp-for="Balance">Balance</th>
+                        <th asp-for="City">City</th>
+                        <th asp-for="Status">Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var customer in Model)
+                    {
+                        <tr>
+                            <td>@customer.Custid</td>
+                            <td>@customer.Name</td>
+                            <td>₹ @customer.Balance</td>
+                            <td>@customer.City</td>
+                            <td>
+                                <span class="badge bg-@(customer.Status ? "success" : "danger")">
+                                    @(customer.Status ? "Active" : "Inactive")
+                                </span>
+                            </td>
+
+                            <td>
+                                @if (customer.Status)
+                                {
+                                    <!-- Active Customer -->
+                                    <a asp-action="EditCustomer" asp-route-Custid="@customer.Custid"
+                                       class="btn btn-warning btn-sm">✏ Edit</a>
+
+                                    <a asp-action="DisplayCustomer" asp-route-Custid="@customer.Custid"
+                                       class="btn btn-info btn-sm text-white">🔍 View</a>
+
+                                    <a asp-action="DeleteCustomer" asp-route-Custid="@customer.Custid"
+                                       class="btn btn-danger btn-sm">🗑 Delete</a>
+                                }
+                                else
+                                {
+                                    <!-- Inactive Customer -->
+                                    <a asp-action="DisplayCustomer" asp-route-Custid="@customer.Custid"
+                                       class="btn btn-info btn-sm text-white">🔍 View</a>
+
+                                    <a asp-action="RestoreCustomer" asp-route-Custid="@customer.Custid"
+                                       class="btn btn-success btn-sm">♻ Restore</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>

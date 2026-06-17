@@ -1,0 +1,126 @@
+﻿@model MVCDHProject.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+    var returnUrl = Context.Request.Query["ReturnUrl"];
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #36b9cc, #4e73df);
+        height: 100vh;
+    }
+
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+    }
+
+    .card {
+        width: 380px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        padding: 25px;
+        background: white;
+    }
+
+        .card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #4e73df;
+        }
+
+    .form-control {
+        border-radius: 10px;
+    }
+
+    .btn-custom {
+        width: 100%;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    .social-btn {
+        width: 100%;
+        margin-top: 10px;
+        border-radius: 10px;
+        color: white;
+        font-weight: bold;
+    }
+
+    .google {
+        background-color: #db4437;
+    }
+
+    .facebook {
+        background-color: #3b5998;
+    }
+
+    .divider {
+        text-align: center;
+        margin: 15px 0;
+        font-weight: bold;
+        color: #888;
+    }
+
+    .extra-links {
+        text-align: center;
+        margin-top: 15px;
+    }
+</style>
+
+<div class="login-container">
+    <div class="card">
+        <h2>Login Page</h2>
+
+        <!-- Social Login Buttons -->
+        <a asp-controller="Account" asp-action="ExternalLogin" asp-route-provider="Google" asp-route-returnUrl="@returnUrl"
+               class="btn social-btn google">
+            Login with Google
+        </a>
+
+        <a asp-controller="Account" asp-action="ExternalLogin" asp-route-provider="Facebook" asp-route-returnUrl="@returnUrl"
+               class="btn social-btn facebook">
+            Login with Facebook
+        </a>
+
+        <div class="divider">OR</div>
+
+        <!-- Normal Login -->
+        <form asp-action="Login" asp-route-ReturnUrl="@returnUrl">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-2">
+                <input asp-for="Name" class="form-control" placeholder="Enter Username" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <input asp-for="Password" type="password" class="form-control" placeholder="Enter Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-2">
+                <input class="form-check-input" asp-for="RememberMe" />
+                <label class="form-check-label">Remember Me</label>
+            </div>
+
+            <input type="submit" value="Login" class="btn btn-primary btn-custom" />
+            <input type="reset" value="Reset" class="btn btn-secondary btn-custom" />
+        </form>
+
+        <div class="extra-links">
+            Not yet Registered? <a asp-action="Register">Register here</a><br />
+            Forgot password? <a asp-action="ForgotPassword">Click</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,94 @@
+﻿@model Customer
+
+@{
+    ViewData["Title"] = "Update Customer";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg rounded-4">
+
+        <!-- Header -->
+        <div class="card-header bg-warning text-dark text-center rounded-top-4">
+            <h2>✏ Update Customer</h2>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+
+            <form asp-controller="Customer" asp-action="UpdateCustomer" method="post">
+
+                <!-- Validation -->
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="row g-3">
+
+                    <!-- Custid (Readonly) -->
+                    <div class="col-md-6">
+                        <label asp-for="Custid" class="form-label fw-bold"></label>
+                        <input asp-for="Custid" class="form-control" readonly />
+                    </div>
+
+                    <!-- Name -->
+                    <div class="col-md-6">
+                        <label asp-for="Name" class="form-label fw-bold"></label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <!-- Balance -->
+                    <div class="col-md-6">
+                        <label asp-for="Balance" class="form-label fw-bold"></label>
+                        <input asp-for="Balance" class="form-control" placeholder="Enter Balance" />
+                        <span asp-validation-for="Balance" class="text-danger"></span>
+                    </div>
+
+                    <!-- City -->
+                    <div class="col-md-6">
+                        <label asp-for="City" class="form-label fw-bold"></label>
+                        <input asp-for="City" class="form-control" placeholder="Enter City" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+
+                    <!-- Status (Display only) -->
+                    <div class="col-md-6">
+                        <label asp-for="Status" class="form-label fw-bold"></label>
+
+                        <div>
+                            <span class="badge bg-@(Model.Status ? "success" : "danger") p-2">
+                                @(Model.Status ? "Active" : "Inactive")
+                            </span>
+                        </div>
+
+                        <!-- Hidden field to send value -->
+                        <input type="hidden" asp-for="Status" />
+                    </div>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="mt-4 text-center">
+
+                    <button type="submit" class="btn btn-primary px-4">
+                        💾 Update
+                    </button>
+
+                    <a asp-action="DisplayCustomers" class="btn btn-secondary px-4">
+                        ❌ Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
